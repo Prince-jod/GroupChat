@@ -24,16 +24,18 @@ function Chat() {
         )}
       </main>
 
-      <form className="message-form">
-        <input
-          type="text"
-          placeholder="Type a message..."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
+      <form className="message-form" onSubmit={handleSend}>
+  <input
+    type="text"
+    placeholder="Type a message..."
+    value={message}
+    onChange={(e) => setMessage(e.target.value)}
+  />
 
-        <button type="submit">Send</button>
-      </form>
+  <button type="submit" disabled={!message.trim()}>
+    Send
+  </button>
+</form>
     </div>
   );
 }
