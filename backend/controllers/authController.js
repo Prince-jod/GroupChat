@@ -35,7 +35,8 @@ const { name, email, password, phone} = req.body;
         user: {
             id: newUser.id,
             name: newUser.name,
-            email: newUser.email
+            email: newUser.email,
+            phone: newUser.phone
         }
     });
 
