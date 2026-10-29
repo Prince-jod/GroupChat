@@ -3,13 +3,14 @@ import { Link } from "react-router-dom";
 
 function Signup() {
   const [formData, setFormData] = useState({
-    phone: "",
+    name: "",
     email: "",
     password: "",
+    phone: "",
   });
 
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -44,12 +45,13 @@ function Signup() {
         throw new Error(data.message || "Signup failed");
       }
 
-      setMessage("Account created successfully! You can now log in.");
+      setMessage("Account created successfully!");
 
       setFormData({
-        phone: "",
+        name: "",
         email: "",
         password: "",
+        phone: "",
       });
     } catch (error) {
       setMessage(error.message || "Unable to connect to the server");
@@ -64,13 +66,13 @@ function Signup() {
         <h1>Create Account</h1>
         <p>Join your friends and start chatting!</p>
 
-        <label htmlFor="phone">Phone Number</label>
+        <label htmlFor="name">Full Name</label>
         <input
-          id="phone"
-          type="tel"
-          name="phone"
-          placeholder="Enter phone number"
-          value={formData.phone}
+          id="name"
+          type="text"
+          name="name"
+          placeholder="Enter your full name"
+          value={formData.name}
           onChange={handleChange}
           required
         />
@@ -80,8 +82,19 @@ function Signup() {
           id="email"
           type="email"
           name="email"
-          placeholder="Enter email address"
+          placeholder="Enter your email"
           value={formData.email}
+          onChange={handleChange}
+          required
+        />
+
+        <label htmlFor="phone">Phone Number</label>
+        <input
+          id="phone"
+          type="tel"
+          name="phone"
+          placeholder="Enter your phone number"
+          value={formData.phone}
           onChange={handleChange}
           required
         />
@@ -91,7 +104,7 @@ function Signup() {
           id="password"
           type="password"
           name="password"
-          placeholder="Create password"
+          placeholder="Create a password"
           value={formData.password}
           onChange={handleChange}
           minLength={8}
