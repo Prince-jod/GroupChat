@@ -15,17 +15,23 @@ app.get("/", (req, res) => {
 const PORT = 5000;
 
 async function startServer() {
-    try {
-        await sequelize.authenticate();
+try {
+await sequelize.authenticate();
+console.log("MySQL connected successfully!");
 
-        console.log("MySQL connected successfully!");
+    await sequelize.sync();
+    console.log("Database tables synchronized!");
 
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
-        });
-    } catch (error) {
-        console.error("Database connection failed:", error.message);
-    }
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
+} catch (error) {
+    console.error("Database connection failed:", error);
 }
+
+}
+
+startServer();
+
 
 startServer();
