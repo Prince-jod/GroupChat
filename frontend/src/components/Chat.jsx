@@ -12,13 +12,70 @@ const [sending, setSending] = useState(false);
 
 const user = JSON.parse(localStorage.getItem("user") || "null");
 
+// Fetch previous messages from MySQL
+useEffect(() => {
+async function fetchMessages() {
+const token = localStorage.getItem("token");
+
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  try {
+    const response = await fetch(
+      "http://localhost:5000/api/messages",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const result = await response.json();
+
+    if (response.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      navigate("/login");
+      return;
+    }
+
+    if (!response.ok) {
+      throw new Error(result.message || "Failed to fetch messages");
+    }
+
+    setMessages(
+      (result.data || []).map((msg) => ({
+        id: msg.id,
+        text: msg.text,
+        sender:
+          String(msg.userId) === String(user?.id) ? "me" : "other",
+        senderName: msg.User?.name || "User",
+        time: new Date(msg.createdAt).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      }))
+    );
+  } catch (error) {
+    console.error("Fetch messages error:", error);
+  }
+}
+
+fetchMessages();
+
+}, [navigate]);
+
+// Scroll to the latest message
 useEffect(() => {
 messagesEndRef.current?.scrollIntoView({
 behavior: "smooth",
 });
 }, [messages]);
 
-// Send message to the backend and save it in MySQL
+// Send a message and save it in MySQL
 async function handleSend(e) {
 e.preventDefault();
 
@@ -47,26 +104,26 @@ try {
 
   const result = await response.json();
 
-  if (!response.ok) {
-    if (response.status === 401) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      navigate("/login");
-      return;
-    }
+  if (response.status === 401) {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+    return;
+  }
 
+  if (!response.ok) {
     throw new Error(result.message || "Failed to send message");
   }
 
   const savedMessage = result.data;
 
-  // Display the message returned by the backend
   setMessages((prevMessages) => [
     ...prevMessages,
     {
       id: savedMessage.id,
       text: savedMessage.text,
       sender: "me",
+      senderName: user?.name || "You",
       time: new Date(savedMessage.createdAt).toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
@@ -82,6 +139,7 @@ try {
   setSending(false);
 }
 
+
 }
 
 function handleLogout() {
@@ -91,6 +149,7 @@ navigate("/login");
 }
 
 return ( <div className="chat-container"> <header className="chat-header"> <div className="chat-profile"> <div className="avatar">G</div>
+
 
       <div>
         <h2>GroupChat</h2>
@@ -128,6 +187,12 @@ return ( <div className="chat-container"> <header className="chat-header"> <div 
           }`}
         >
           <div className="message">
+            {msg.sender === "other" && (
+              <strong className="message-sender">
+                {msg.senderName}
+              </strong>
+            )}
+
             <p>{msg.text}</p>
             <span>{msg.time}</span>
           </div>
