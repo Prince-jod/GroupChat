@@ -7,6 +7,7 @@ import {
 
 import Signup from "./components/signup";
 import Login from "./components/Login";
+import Chat from "./components/Chat";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
 
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </BrowserRouter>
   );
