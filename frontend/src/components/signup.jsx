@@ -8,6 +8,9 @@ function Signup() {
     password: "",
   });
 
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
+
   function handleChange(e) {
     const { name, value } = e.target;
 
@@ -17,11 +20,42 @@ function Signup() {
     }));
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
+    setMessage("");
 
-    console.log("Signup data:", formData);
-    alert("Signup form submitted!");
+    try {
+      setLoading(true);
+
+      const response = await fetch(
+        "http://localhost:5000/api/auth/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Signup failed");
+      }
+
+      setMessage("Account created successfully! You can now log in.");
+
+      setFormData({
+        phone: "",
+        email: "",
+        password: "",
+      });
+    } catch (error) {
+      setMessage(error.message || "Unable to connect to the server");
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -64,7 +98,11 @@ function Signup() {
           required
         />
 
-        <button type="submit">Sign Up</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Creating account..." : "Sign Up"}
+        </button>
+
+        {message && <p role="status">{message}</p>}
 
         <p className="auth-footer">
           Already have an account? <Link to="/login">Login</Link>
