@@ -30,7 +30,7 @@ try {
 await sequelize.authenticate();
 console.log("MySQL connected successfully!");
 
-    await sequelize.sync({);
+    await sequelize.sync();
     console.log("Database tables synchronized!");
 
     app.listen(PORT, () => {
