@@ -92,7 +92,6 @@ navigate("/login");
 
 return ( <div className="chat-container"> <header className="chat-header"> <div className="chat-profile"> <div className="avatar">G</div>
 
-```
       <div>
         <h2>GroupChat</h2>
         <p>Group conversation</p>
