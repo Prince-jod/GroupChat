@@ -4,6 +4,26 @@ import "./styles/Chat.css";
 function Chat() {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  function handleSend(e) {
+  e.preventDefault();
+
+  const text = message.trim();
+
+  if (!text) return;
+
+  const newMessage = {
+    id: Date.now(),
+    text: text,
+    time: new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+    }),
+  };
+
+  setMessages((prevMessages) => [...prevMessages, newMessage]);
+
+  setMessage("");
+}
 
   return (
     <div className="chat-container">
