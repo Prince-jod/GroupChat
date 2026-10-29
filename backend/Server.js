@@ -2,7 +2,7 @@ const express = require("express");
 const sequelize = require("./config/db");
 const User =require("./model/User");
 const authRoutes = require("./routes/authRoutes");
-
+const cors =require('cors');
 const app = express();
 
 // here i am allowing the front origin
