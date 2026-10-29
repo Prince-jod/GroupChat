@@ -15,6 +15,7 @@ app.use(cors({
 
 app.use(express.json());
 app.use("/api/auth",authRoutes);
+app.use("/api/messages", messageRoutes);
 
 app.get("/", (req, res) => {
     res.send("Group Chat Backend is running!");
