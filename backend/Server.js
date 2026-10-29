@@ -1,7 +1,7 @@
 const express = require("express");
 const sequelize = require("./config/db");
 const Message = require("./model/Message");
-require("/model/associations");
+require("./model/associations");
 const User =require("./model/User");
 const authRoutes = require("./routes/authRoutes");
 const messageRoutes=require("./routes/messsageRoutes");
