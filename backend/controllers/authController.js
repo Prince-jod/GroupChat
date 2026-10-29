@@ -3,9 +3,9 @@ const bcrypt = require("bcrypt");
 
 const signup = async (req, res) => {
 try {
-const { name, email, password } = req.body;
+const { name, email, password, phone} = req.body;
 
-    if (!name || !email || !password) {
+    if (!name || !email || !password || !phone) {
         return res.status(400).json({
             message: "All fields are required"
         });
@@ -26,6 +26,7 @@ const { name, email, password } = req.body;
     const newUser = await User.create({
         name,
         email,
+        phone,
         password: hashedPassword
     });
 
