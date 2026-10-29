@@ -4,7 +4,7 @@ const Message = require("./model/Message");
 require("./model/associations");
 const User =require("./model/User");
 const authRoutes = require("./routes/authRoutes");
-const messageRoutes=require("./routes/messsageRoutes");
+const messageRoutes=require("./routes/messageRoutes");
 const cors =require('cors');
 const app = express();
 
