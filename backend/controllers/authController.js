@@ -45,7 +45,6 @@ const { name, email, password } = req.body;
         message: "Internal server error"
     });
 }
-```
 
 };
 
