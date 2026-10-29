@@ -37,6 +37,3 @@ console.log("MySQL connected successfully!");
 }
 
 startServer();
-
-
-startServer();
