@@ -50,7 +50,7 @@ function Login() {
             localStorage.setItem("user", JSON.stringify(data.user));
 
             // Open chat page
-            navigate("/chat");
+            navigate("/signup");'//'//-----
 
         } catch (error) {
             setMessage(
