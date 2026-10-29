@@ -4,9 +4,8 @@ import { Link } from "react-router-dom";
 function Signup() {
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
+    identifier: "",
     password: "",
-    phone: "",
   });
 
   const [message, setMessage] = useState("");
@@ -49,9 +48,8 @@ function Signup() {
 
       setFormData({
         name: "",
-        email: "",
+        identifier: "",
         password: "",
-        phone: "",
       });
     } catch (error) {
       setMessage(error.message || "Unable to connect to the server");
@@ -71,30 +69,19 @@ function Signup() {
           id="name"
           type="text"
           name="name"
-          placeholder="Enter your full name"
+          placeholder="Enter your name"
           value={formData.name}
           onChange={handleChange}
           required
         />
 
-        <label htmlFor="email">Email</label>
+        <label htmlFor="identifier">Email or Phone Number</label>
         <input
-          id="email"
-          type="email"
-          name="email"
-          placeholder="Enter your email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-
-        <label htmlFor="phone">Phone Number</label>
-        <input
-          id="phone"
-          type="tel"
-          name="phone"
-          placeholder="Enter your phone number"
-          value={formData.phone}
+          id="identifier"
+          type="text"
+          name="identifier"
+          placeholder="Enter email or phone number"
+          value={formData.identifier}
           onChange={handleChange}
           required
         />
