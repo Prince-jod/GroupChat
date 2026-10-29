@@ -1,10 +1,12 @@
 const express = require("express");
 const sequelize = require("./config/db");
 const User =require("./model/User");
+const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
 app.use(express.json());
+app.use("/api/auth",authRoutes);
 
 app.get("/", (req, res) => {
     res.send("Group Chat Backend is running!");
