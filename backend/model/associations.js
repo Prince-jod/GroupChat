@@ -9,3 +9,5 @@ User.hasMany(Message, {
 Message.belongsTo(User, {
   foreignKey: "userId",
 });
+
+module.exports={User,Message};
