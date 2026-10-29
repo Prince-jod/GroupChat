@@ -1,7 +1,10 @@
 const express = require("express");
 const sequelize = require("./config/db");
+const Message = require("./model/Message");
+require("/model/associations");
 const User =require("./model/User");
 const authRoutes = require("./routes/authRoutes");
+const messageRoutes=require("./routes/messsageRoutes");
 const cors =require('cors');
 const app = express();
 
