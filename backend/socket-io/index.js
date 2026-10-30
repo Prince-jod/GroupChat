@@ -1,61 +1,35 @@
+const { Server } = require("socket.io");
 
-require("dotenv").config();
+const socketAuth = require("./middleware");
+const chatHandler = require("./handlers/chat");
 
-const http = require("http");
-const express = require("express");
-const sequelize = require("./config/db");
+const initializeSocket = (server) => {
 
-require("./model/associations");
+    const io = new Server(server, {
+        cors: {
+            origin: "http://localhost:5173",
+            methods: ["GET", "POST"]
+        }
+    });
 
-const authRoutes = require("./routes/authRoutes");
-const messageRoutes = require("./routes/messageRoutes");
-const cors = require("cors");
+    // Authenticate every socket connection
+    io.use(socketAuth);
 
-// Create Express application
-const app = express();
+    io.on("connection", (socket) => {
 
-// Allow frontend origin
-app.use(cors({
-    origin: "http://localhost:5173"
-}));
+        console.log("User connected:", socket.user.id);
+        console.log("Socket ID:", socket.id);
 
-app.use(express.json());
+        // Register chat events
+        chatHandler(io, socket);
 
-// API routes
-app.use("/api/auth", authRoutes);
-app.use("/api/messages", messageRoutes);
-
-app.get("/", (req, res) => {
-    res.send("Group Chat Backend is running!");
-});
-
-const PORT = 5000;
-
-// Create HTTP server
-const server = http.createServer(app);
-
-// Initialize Socket.IO
-const initializeSocket = require("./socket-io");
-const io = initializeSocket(server);
-
-// Make io accessible to Express controllers
-app.set("io", io);
-
-async function startServer() {
-    try {
-        await sequelize.authenticate();
-        console.log("MySQL connected successfully!");
-
-        await sequelize.sync();
-        console.log("Database tables synchronized!");
-
-        server.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
+        socket.on("disconnect", () => {
+            console.log("User disconnected:", socket.user.id);
         });
 
-    } catch (error) {
-        console.error("Database connection failed:", error);
-    }
-}
+    });
 
-startServer();
+    return io;
+};
+
+module.exports = initializeSocket;
