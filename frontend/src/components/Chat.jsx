@@ -70,20 +70,39 @@ fetchMessages();
 }, [navigate]);
 
 // Listen for Socket.IO connection
+// Connect Socket.IO with JWT authentication
 useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        navigate("/login");
+        return;
+    }
+
+    socket.auth = { token };
+
+    socket.connect();
+
     socket.on("connect", () => {
-        console.log("Connected to Socket.IO:", socket.id);
+        console.log("Socket connected:", socket.id);
+    });
+
+    socket.on("connect_error", (error) => {
+        console.error("Socket authentication failed:", error.message);
     });
 
     socket.on("disconnect", () => {
-        console.log("Disconnected from Socket.IO");
+        console.log("Socket disconnected");
     });
 
     return () => {
         socket.off("connect");
+        socket.off("connect_error");
         socket.off("disconnect");
+        socket.disconnect();
     };
-}, []);
+
+}, [navigate]);
 
 // Scroll to the latest message
 useEffect(() => {
