@@ -66,6 +66,11 @@ io.on("connection", (socket) => {
 
     console.log("User connected:", socket.id);
 
+
+    console.log("User ID:", socket.user.userId);
+
+    console.log("Socket ID:", socket.id);
+
     socket.on("disconnect", () => {
         console.log("User disconnected:", socket.id);
     });
