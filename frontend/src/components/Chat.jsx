@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./styles/Chat.css";
+import socket from "../socket";
 
 function Chat() {
 const navigate = useNavigate();
@@ -67,6 +68,22 @@ const token = localStorage.getItem("token");
 fetchMessages();
 
 }, [navigate]);
+
+// Listen for Socket.IO connection
+useEffect(() => {
+    socket.on("connect", () => {
+        console.log("Connected to Socket.IO:", socket.id);
+    });
+
+    socket.on("disconnect", () => {
+        console.log("Disconnected from Socket.IO");
+    });
+
+    return () => {
+        socket.off("connect");
+        socket.off("disconnect");
+    };
+}, []);
 
 // Scroll to the latest message
 useEffect(() => {
